@@ -12,4 +12,14 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://api.weatherapi.com/v1",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+        secure: true,
+      },
+    },
+  },
 })
