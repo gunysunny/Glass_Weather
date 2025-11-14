@@ -3,3 +3,45 @@
 .info-box {
     @apply bg-white/10 rounded-xl p-3 text-center backdrop-blur-md border border-white/25 shadow-lg shadow-black/20 transition-all duration-500 hover:bg-white/20 hover:shadow-xl hover:scale-105;
   }
+
+
+
+  @theme {
+  --color-glassLight: rgba(255,255,255,0.3);
+  --color-glassDark: rgba(0,0,0,0.3);
+}
+
+@layer base {
+  /* 다크 모드 전환용 */
+  :root {
+    color-scheme: light dark;
+  }
+
+  html.light {
+    --bg-gradient: linear-gradient(to bottom right, #7dd3fc, #818cf8, #c084fc); /* 하늘~보라 */
+  }
+
+  html.dark {
+    --bg-gradient: linear-gradient(to bottom right, #111827, #1e1b4b, #000000); /* 어두운 남보라~블랙 */
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-md border border-white/20 shadow-xl transition-all;
+  }
+}
+
+@theme {
+  --color-glassLight: rgba(255,255,255,0.3);
+  --color-glassDark: rgba(0,0,0,0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-in-out;
+}
