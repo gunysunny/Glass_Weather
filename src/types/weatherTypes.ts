@@ -55,8 +55,33 @@ export interface SearchFormProps {
   city: string;
   setCity: (val: string) => void;
   onSearch: (e: React.FormEvent) => void;
+  suggestions: any[];
+  onSelectSuggestion: (name: string) => void;
+  recentCities: string[];
+  onSelectRecent: (name: string) => void;
 }
 
+
+
 export interface WeatherCardProps {
-  data: WeatherData;
+  data: {
+    location: { name: string; localtime: string };
+    current: {
+      temp_c: number;
+      feelslike_c: number;
+      humidity: number;
+      wind_kph: number;
+      condition: { text: string };
+    };
+  };
 }
+
+
+export interface HourData {
+  time: string;
+  temp_c: number;
+  feelslike_c: number;
+}
+
+
+
