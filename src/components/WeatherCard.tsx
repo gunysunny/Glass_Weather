@@ -1,19 +1,32 @@
 import Lottie from "lottie-react";
+
 import sunny from "@/assets/lottie/sunny.json";
 import rain from "@/assets/lottie/Rainy.json";
 import cloud from "@/assets/lottie/Weather-storm.json";
 import snow from "@/assets/lottie/Weather-snow.json";
-import InfoBox from "./InfoBox";
+import night from "@/assets/lottie/night.json";
+
+import InfoBox from "@/components/InfoBox";
 import type { WeatherCardProps } from "@/types";  
 
 export default function WeatherCard({ data }: WeatherCardProps) {
   const text = data.current.condition.text.toLowerCase();
 
-  const animation =
-    text.includes("rain") || text.includes("비") ? rain :
-    text.includes("cloud") || text.includes("구름") || text.includes("천둥") ? cloud :
-    text.includes("snow") || text.includes("눈") ? snow :
-    sunny;
+  // 현재 시간 추출
+  const localTime = data.location.localtime;
+  const hour = new Date(localTime).getHours();
+  const isNight = hour < 6 || hour >= 18;
+
+  // 날씨 애니메이션 결정 (낮/밤 분기 포함)
+  const animation = isNight
+    ? night
+    : text.includes("rain") || text.includes("비")
+    ? rain
+    : text.includes("cloud") || text.includes("구름") || text.includes("천둥")
+    ? cloud
+    : text.includes("snow") || text.includes("눈")
+    ? snow
+    : sunny;
 
   return (
     <div className="mt-6 animate-fadeIn flex flex-col items-center">
@@ -23,8 +36,9 @@ export default function WeatherCard({ data }: WeatherCardProps) {
       <p className="text-lg capitalize">{data.current.condition.text}</p>
       <p className="text-4xl font-bold mt-2">{data.current.temp_c}°C</p>
 
+      {/* 추가 정보 섹션 */}
       <div className="flex gap-3 mt-4 justify-center">
-        {[
+        {[ 
           { label: "체감", value: data.current.feelslike_c, unit: "°" },
           { label: "습도", value: data.current.humidity, unit: "%" },
           { label: "풍속", value: data.current.wind_kph, unit: "km/h" },
