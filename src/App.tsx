@@ -1,35 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import WeatherLayout from "@/components/layouts/WeatherLayout";
+import SearchForm from "@/components/SearchForm";
+import WeatherCard from "@/components/WeatherCard";
+import ForecastList from "@/components/ForecastList";
+import { useWeather } from "@/hooks/useWeather";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const { city, setCity, data, loading, error, handleSearch } = useWeather();
+  const condition = data?.current?.condition?.text || "";
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <WeatherLayout title="🌤 Glass Weather UI" condition={condition}>
+      <SearchForm city={city} setCity={setCity} onSearch={handleSearch} />
 
-export default App
+      {loading && <p className="animate-pulse mt-4">🌧 데이터를 불러오는 중...</p>}
+      {error && <p className="mt-4 text-red-200">{error}</p>}
+      {data && data.current && !loading && (
+        <>
+          <WeatherCard data={data} />
+          <ForecastList forecast={data.forecast.forecastday} />
+        </>
+      )}
+    </WeatherLayout>
+  );
+}
